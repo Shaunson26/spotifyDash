@@ -1,0 +1,104 @@
+:root {
+    /*https://colorhunt.co/palette/ffc996ff84749f5f80583d72*/
+--cream: rgba(255, 201, 150, 1);
+--orange: rgba(255, 132, 116, 1);
+--lightPurple: rgba(159, 95, 128, 1);
+--darkPurple: rgba(88, 61, 114, 1);
+}
+
+html {
+    background-color: var(--cream);
+    font-family: 'Patrick Hand', cursive;
+    font-size: 12px;
+    height: 100vh;
+}
+
+body {
+    height: 100%;
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    color: var(--darkPurple)
+}
+
+
+h1 {
+    font-size: 5em;
+    font-weight: bold;
+    font-family: 'Noticia Text', sans-serif;
+    margin: 0;
+}
+
+h3 {
+    font-family: 'Patrick Hand', sans-serif;
+    font-weight: bold;
+    margin: 0;
+}
+
+.track-row {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        font-family: 'Patrick Hand', sans-serif;
+        letter-spacing: 0.05em;
+        padding: 0px 16px;
+    }
+
+.track-card {
+    flex: 0 0 auto;
+    min-height: 150px;
+    margin: 12px 8px;
+    width: 150px;
+    background-color: var(--darkPurple);
+    text-align: center;
+    padding: 4px;
+}
+
+.track-card:hover {
+    transform: scale(1.05);
+}
+
+.track-title,
+.artist-name {
+    margin: 0;
+    margin-left: 5px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--cream);
+}
+
+.track-title {
+    font-weight:bold;
+}
+
+ 
+@media screen and (max-width: 600px) {
+    body {
+        height: auto
+    }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 20px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--cream); 
+    border-radius: 16px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--darkPurple); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--darkPurple); 
+  }

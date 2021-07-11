@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'Tourney-title';
+  src: url('Tourney-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Tourney';
+  src: url('Tourney-Black.ttf') format('truetype');
+}
+
