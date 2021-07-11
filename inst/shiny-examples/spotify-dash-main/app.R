@@ -33,7 +33,7 @@ ui <-
                 `font-family`= "'Tourney', sans-serif;", `font-size` = '12px'),
     h1('Your Spotify'),
     h3('Top tracks'),
-    fluidRow(style = css(border = '0px solid black',`border-radius` = '5px 5px 50px 50px ',`background-color` = 'white', overflow = 'hidden'),
+    fluidRow(style = css(padding = '16px', border = '0px solid black',`border-radius` = '5px 5px 50px 50px ',`background-color` = 'white', overflow = 'hidden'),
              column(width = 6,
                     style = 'margin: 0px;',
                     plotlyOutput('audio_scatter', width = '100%')),
@@ -50,54 +50,88 @@ ui <-
              )
     ),
     br(),
-    fluidRow(id='track-banner',
-             style = css(`border-radius` = '50px 50px 5px 5px',`background-color` = 'white')
+    fluidRow(style = css(`border-radius` = '50px 50px 5px 5px',`background-color` = 'white'),
+             tags$div(id='track-banner', style = css(display = 'flex',
+                                                     `overflow-x` = 'scroll',
+                                                     `overflow-y` = 'hidden',
+                                                     margin = '16px',
+                                                     `min-height` = '200px',
+                                                     `margin-bottom` = 0,
+                                                     `padding-bottom` = '8px')
+                      # cards insert here
+             )
     )
   )
 
 # Server ----
 server <- function(input, output, session) {
 
-  output$audio_scatter <- renderPlotly(
-    rp_tf_df %>%
-      dplyr::mutate(track = 1:nrow(rp_tf_df)) %>%
-      audio_scatterpolar_multiple(mode = 'lines', alpha = 0.5, add_mean = F) %>%
-      config(displayModeBar = FALSE)
-  )
-
-  #   features = c('danceability', 'energy', 'loudness', 'speechiness',
-  #                'acousticness', 'instrumentalness', 'liveness', 'valence')
-
-  output$audio_hists1 <- renderPlotly({ audio_hist(rp_tf_df$danceability, 'danceability', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-  output$audio_hists2 <- renderPlotly({ audio_hist(rp_tf_df$energy, 'energy', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-  output$audio_hists3 <- renderPlotly({ audio_hist(rp_tf_df$loudness, 'loudness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-  output$audio_hists4 <- renderPlotly({ audio_hist(rp_tf_df$speechiness, 'speechiness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-  output$audio_hists5 <- renderPlotly({ audio_hist(rp_tf_df$acousticness, 'acousticness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-  output$audio_hists6 <- renderPlotly({ audio_hist(rp_tf_df$instrumentalness, 'instrumentalness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-  output$audio_hists7 <- renderPlotly({ audio_hist(rp_tf_df$liveness, 'liveness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-  output$audio_hists8 <- renderPlotly({ audio_hist(rp_tf_df$valence, 'valence', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
-
-
-
-  flex_content <-
-    apply(rp_df, 1, function(row){
-      as.list(row) %>%
-        make_track_card() }) %>%
-    htmltools::tagList()
-
-
-  flex_box <-
-    tags$div(style = css(display = 'flex',
-                         `overflow-x` = 'scroll',
-                         `overflow-y` = 'hidden',
-                         margin = '16px',
-                         `margin-bottom` = 0,
-                         `padding-bottom` = '8px'),
-             flex_content
+  authModel <-
+    modalDialog(
+      title = 'Authorize data collection',
+      'blah blah blah',
+      easyClose = TRUE,
+      footer =  tagList(
+        modalButton("Cancel"),
+        actionButton("authOk", "OK")
+      )
     )
 
-  insertUI(selector = '#track-banner',
-           ui = flex_box)
+  #showModal(authModel)
+
+  #observeEvent(input$authOk, {
+
+    removeModal()
+
+    # * Get data ----
+    #get_spotify_oauth_token()
+
+    #+ Insert error check here
+
+    rp_df <-
+      get_recently_played() %>%
+      summarise_recently_played()
+
+    rp_tf_df <-
+      get_track_id(rp) %>%
+      get_audio_features(rp_df$track_id) %>%
+      summarise_audio_features()
+
+    #+ Insert error check here
+
+    # * plots ----
+    output$audio_scatter <- renderPlotly(
+      rp_tf_df %>%
+        dplyr::mutate(track = 1:nrow(rp_tf_df)) %>%
+        audio_scatterpolar_multiple(mode = 'lines', alpha = 0.5, add_mean = F) %>%
+        config(displayModeBar = FALSE)
+    )
+
+    #+ Program this?
+
+    #   features = c('danceability', 'energy', 'loudness', 'speechiness',
+    #                'acousticness', 'instrumentalness', 'liveness', 'valence')
+
+    output$audio_hists1 <- renderPlotly({ audio_hist(rp_tf_df$danceability, 'danceability', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+    output$audio_hists2 <- renderPlotly({ audio_hist(rp_tf_df$energy, 'energy', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+    output$audio_hists3 <- renderPlotly({ audio_hist(rp_tf_df$loudness, 'loudness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+    output$audio_hists4 <- renderPlotly({ audio_hist(rp_tf_df$speechiness, 'speechiness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+    output$audio_hists5 <- renderPlotly({ audio_hist(rp_tf_df$acousticness, 'acousticness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+    output$audio_hists6 <- renderPlotly({ audio_hist(rp_tf_df$instrumentalness, 'instrumentalness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+    output$audio_hists7 <- renderPlotly({ audio_hist(rp_tf_df$liveness, 'liveness', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+    output$audio_hists8 <- renderPlotly({ audio_hist(rp_tf_df$valence, 'valence', font.family = 'Tourney', title.font.size = 12, tickfont.size = 8)})
+
+    # * cards ----
+    flex_content <-
+      apply(rp_df, 1, function(row){
+        as.list(row) %>%
+          make_track_card() }) %>%
+      htmltools::tagList()
+
+    insertUI(selector = '#track-banner',
+             ui = flex_content)
+
+  #})
 }
 
 # Run app ----

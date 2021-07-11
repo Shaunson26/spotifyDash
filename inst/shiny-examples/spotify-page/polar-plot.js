@@ -2,18 +2,15 @@
 //
 // Wrapper for plotly scatterpolargl using an audioFeatures json
 //
-let bgPuple = "rgb(88, 61, 114)"
-let gridPurple = 'rgb(88, 61, 114)'
-let lineCream = 'rgba(255, 201, 150, 0.33)'
 
-plotly_polar('polar-plot', audioFeatures)
+// The call
+//plotly_polar(audioFeatures, graphDiv = 'polar-plot')
 
-let polarHoverUpdate = {
-    on: { 'line.color': 'rgba(255,0,0,0.5)', 'line.width': 8 },
-    off: { 'line.color': lineCream, 'line.width': 4 }
-}
+// The call pieces - 2 functions
+function plotly_polar(featureData, graphDiv) {
 
-function plotly_polar(graphDiv, featureData) {
+    let bgPuple = "rgb(88, 61, 114)"
+    let lineCream = 'rgba(255, 201, 150, 0.33)'
 
     let features = ["acousticness", "danceability", "energy", "instrumentalness",
         "liveness"/*, 'loudness'*/, "speechiness", "valence", "acousticness"]
@@ -31,8 +28,8 @@ function plotly_polar(graphDiv, featureData) {
             },
             text: features,
             hovertemplate:
-            "<b>%{text}</b>:%{r}" +
-            "<extra></extra>"
+                "<b>%{text}</b>:%{r}" +
+                "<extra></extra>"
         }
         return trace
     })
@@ -81,4 +78,24 @@ function plotly_polar(graphDiv, featureData) {
     }
 
     Plotly.newPlot(graphDiv, polarData, polarLayout, config);
+}
+
+function plotly_polar_update(graphDiv = 'polar-plot', onOff, traceInd) {
+
+    let lineCream = 'rgba(255, 201, 150, 0.33)'
+
+    let polarHoverUpdate = {
+        on: { 'line.color': 'rgba(255,0,0,0.5)', 'line.width': 8 },
+        off: { 'line.color': lineCream, 'line.width': 4 }
+    }
+
+    if (onOff == 'on') {
+        Plotly.restyle(graphDiv, polarHoverUpdate.on, traceInd);
+        Plotly.moveTraces(graphDiv, traceInd, -1);
+    }
+
+    if (onOff == 'off') {
+        Plotly.moveTraces('polar-plot', -1, traceInd);
+        Plotly.restyle('polar-plot', polarHoverUpdate.off, traceInd);
+    }
 }

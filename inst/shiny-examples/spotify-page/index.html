@@ -12,24 +12,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noticia+Text:wght@700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noticia+Text:wght@700&family=Patrick+Hand&display=swap"
+        rel="stylesheet">
     <title>Spotify baby!</title>
 </head>
 
 <body>
     <div class="w3-row ">
-        <div class="w3-container w3-center" id='title-container'>
-            <h1>Your Spotify</h1>
-   
+        <div class="w3-container" id='title-container'>
+            <h1 class="w3-center">Your Spotify</h1>
+            <h3>Recently played</h3>
         </div>
     </div>
-    <h3>Recently played</h3>
+
     <div class="w3-row" id='plot-row'>
         <div class='w3-half' style='height:400px;'>
             <div id="polar-plot" style='height:400px;'></div>
         </div>
-        <div class="w3-half" id="hist-half"> 
+        <div class="w3-half" id="hist-half">
             <div class="w3-row"></div>
             <div class="w3-row"></div>
             <div class="w3-row"></div>
@@ -44,35 +45,22 @@
     <script src="spline-plot.js"></script>
     <script src="track-cards.js"></script>
     <script>
-        hoverOn = function (x) {
-            let cardDivs = [...document.querySelector('.track-row').children]
-            let dataInd = cardDivs.map(d => d.id).indexOf(x.id)
 
-            Plotly.restyle('polar-plot', polarHoverUpdate.on, dataInd);
-            Plotly.moveTraces('polar-plot', dataInd, -1);
+        fetch('audio-data.json')
+            .then(response => response.json())
+            .then(audioFeatures => {
+                plotly_polar(audioFeatures, graphDiv = 'polar-plot');
+                addHistograms(audioFeatures);
+            });
 
-            // Object literal
-            let afFull = audioFeatures.audio_features[dataInd]
-            // Iterate over tusing these key selector
-            let ff = features = ["acousticness", "danceability", "energy", "instrumentalness",
-                "liveness"/*, 'loudness'*/, "speechiness", "valence", "acousticness"]
-            let af = ff.map(d => afFull[d])
-            af.forEach((d, i) => {
-                add_spline(`plot-spline-${i}`, d)
-            })
-        }
-        hoverOff = function (x) {
-            let cardDivs = [...document.querySelector('.track-row').children]
-            let dataInd = cardDivs.map(d => d.id).indexOf(x.id)
+        fetch('track-data.json')
+            .then(response => response.json())
+            .then(trackFeatures => {
+                insertCards(trackFeatures);
+            });
 
-            Plotly.moveTraces('polar-plot', -1, dataInd);
-            Plotly.restyle('polar-plot', polarHoverUpdate.off, dataInd);
 
-            document.querySelectorAll(".plot-spline").forEach((d, i) => {
-                Plotly.deleteTraces(`plot-spline-${i}`, 1)
-            })
 
-        }
     </script>
 </body>
 

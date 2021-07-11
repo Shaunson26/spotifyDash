@@ -1,29 +1,42 @@
-// Spline plots
-let spfeatures = ["acousticness", "danceability", "energy", "instrumentalness",
-    "liveness"/*, 'loudness'*/, "speechiness", "valence", "acousticness"]
+// Audio features "density" histograms
+//
+//
 
-spfeatures.forEach((d, i) => {
-    function nodeSelect(x) {
-        return x <= 1 ? 0
-            : x <= 3 ? 1
-                : x <= 5 ? 2
-                    : 3;
-    }
-    let histHalf = document.querySelector("#hist-half").children // 4
-    let divHalf = document.createElement('div')
-    divHalf.classList.add("w3-half")
-    divHalf.classList.add("plot-half")
-    let plotDiv = document.createElement('div')
-    plotDiv.classList.add("plot-spline")
-    plotDiv.id = `plot-spline-${i}`
-    plotDiv.style.height = '100px'
-    divHalf.append(plotDiv)
-    histHalf[nodeSelect(i)].append(divHalf)
+// the call
+//addHistograms(audioFeatures)
 
-    plotly_spline(`plot-spline-${i}`, createSplineData(audioFeatures, d))
-})
+// Build containers, add plots and append results
+function addHistograms(featureData) {
 
-function createSplineData(featureData, feature, thresholds = 10) {
+    let spfeatures = ["acousticness", "danceability", "energy", "instrumentalness",
+        "liveness"/*, 'loudness'*/, "speechiness", "valence", "acousticness"]
+
+    spfeatures.forEach((d, i) => {
+        function nodeSelect(x) {
+            return x <= 1 ? 0
+                : x <= 3 ? 1
+                    : x <= 5 ? 2
+                        : 3;
+        }
+        let histHalf = document.querySelector("#hist-half").children // 4 hardcoded
+        let divHalf = document.createElement('div')
+        divHalf.classList.add("w3-half")
+        divHalf.classList.add("plot-half")
+        let plotDiv = document.createElement('div')
+        plotDiv.classList.add("plot-spline")
+        plotDiv.id = `plot-spline-${i}`
+        plotDiv.style.height = '100px'
+        divHalf.append(plotDiv)
+        histHalf[nodeSelect(i)].append(divHalf)
+
+        let histData = createHistData(featureData, d)
+
+        plotly_spline(`plot-spline-${i}`, histData)
+    })
+}
+
+// Extract data from JSON
+function createHistData(featureData, feature, thresholds = 10) {
 
     let featureArray = featureData.audio_features.map(d => d[feature])
     featureArray.push(0)
@@ -70,23 +83,10 @@ function createSplineData(featureData, feature, thresholds = 10) {
     }
 }
 
-function add_spline(graphDiv, x) {
-    let newData = {
-        x: [x],
-        y: [0],
-        mode: 'marker',
-        marker: {
-            color: 'rgba(255,0,0,0.5)',
-            size: 10
-        },
-        showlegend: false
-    }
-    Plotly.addTraces(graphDiv, newData, 1);
-}
-
-function remove_spline(graphDiv) {
-    console.log('remove')
-    Plotly.deleteTraces(graphDiv, 1);
+function clearHighlightHist(highlightInd=1) {
+    document.querySelectorAll(".plot-spline").forEach((d, i) => {
+        Plotly.deleteTraces(`plot-spline-${i}`, highlightInd)
+    })
 }
 
 function plotly_spline(graphDiv, data) {
@@ -109,7 +109,7 @@ function plotly_spline(graphDiv, data) {
             shape: 'spline',
             smoothing: 1
         },
-        hoverinfo:"x+y+text",
+        hoverinfo: "x+y+text",
         hovertemplate: "%{y:.2f} % of tracks with<br>" + `${data.title} of %{x}<extra></extra>`,
         showlegend: false
     }];
@@ -170,34 +170,31 @@ function plotly_spline(graphDiv, data) {
     Plotly.newPlot(graphDiv, dataSpline, layoutSpline, config);
 }
 
-var splineHoverUpdate = {
-    on: { 'marker.color': [['red', 'red', 'red']] },
-    off: { 'marker.color': [['red', 'red', 'red']] }
-}
+function highlightHist(dataInd, highlightInd=1) {
 
-// Barplots
-/*var trace1 = {
-    type: 'bar',
-    x: [1, 2, 3],
-    y: [5, 10, 2],
-    marker: {
-        color: ['red', 'red', 'red'],
-        line: {
-            width: 1
+    // Object literal
+    let afFull = audioFeatures.audio_features[dataInd]
+    // Iterate over tusing these key selector
+    let ff = ["acousticness", "danceability", "energy", "instrumentalness",
+        "liveness"/*, 'loudness'*/, "speechiness", "valence", "acousticness"]
+
+    // The value array in ff order
+    let af = ff.map(d => afFull[d])
+
+    af.forEach((d, i) => {
+        let highlightData = {
+            x: [d],
+            y: [0],
+            mode: 'marker',
+            marker: {
+                color: 'rgba(255,0,0,0.5)',
+                size: 10
+            },
+            showlegend: false
         }
-    }
-};
+        // The data and trace index
+        Plotly.addTraces(`plot-spline-${i}`, highlightData, highlightInd)
+    })
 
-var data = [trace1];
-
-var layout = {
-    margin: { l: 16, r: 16, t: 16, b: 16 }
-};
-
-var barHoverUpdate = {
-    on: { 'marker.color': [['red', 'red', 'red']] },
-    off: { 'marker.color': [['red', 'red', 'red']] }
 }
 
-
-Plotly.newPlot('plot-2', data, layout, config);*/
