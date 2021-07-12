@@ -65,7 +65,7 @@ function plotly_polar(featureData, graphDiv) {
                 showticklabels: true,
                 tickfont: {
                     color: bgPuple,
-                    family: 'Patrick Hand',
+                    family: "'metal', 'Patrick Hand'",
                     size: 16,
                 }
             }

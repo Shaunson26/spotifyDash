@@ -3,3 +3,6 @@
 export(get_artist_features)
 export(get_audio_features)
 export(get_spotify_oauth_token)
+export(make_track_card)
+export(run_spotify_shiny_dash)
+export(summarise_recently_played)

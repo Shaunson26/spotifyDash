@@ -1,9 +1,6 @@
 library(devtools)
 library(magrittr)
 
-Sys.setenv(SPOTIFY_CLIENT_ID = '010e9d1bdca144e886246a77a1b2ed67')
-Sys.setenv(SPOTIFY_CLIENT_SECRET = '5efb7631c7ba48329008f98d7ba1f4b6')
-
 document()
 load_all()
 

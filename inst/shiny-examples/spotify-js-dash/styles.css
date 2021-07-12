@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'metal';
+  /*src: url('XXII Ultimate-Black-Metal.ttf');*/
+  /*src: url('DEMED___.TTF');*/
+  src: url('Ghastly\ Panic.ttf');
+}
+
 :root {
     /*https://colorhunt.co/palette/ffc996ff84749f5f80583d72*/
 --cream: rgba(255, 201, 150, 1);
@@ -8,7 +15,7 @@
 
 html {
     background-color: var(--cream);
-    font-family: 'Patrick Hand', cursive;
+    font-family: 'metal', 'Patrick Hand', cursive;
     font-size: 12px;
     height: 100vh;
 }
@@ -27,21 +34,23 @@ body {
 h1 {
     font-size: 5em;
     font-weight: bold;
-    font-family: 'Noticia Text', sans-serif;
+    font-family: 'metal', 'Noticia Text', sans-serif;
     margin: 0;
+    letter-spacing: 3px;
 }
 
 h3 {
-    font-family: 'Patrick Hand', sans-serif;
+    font-family: 'metal', 'Patrick Hand', sans-serif;
     font-weight: bold;
     margin: 0;
+    letter-spacing: 2px;
 }
 
 .track-row {
         display: flex;
         flex-wrap: nowrap;
         overflow-x: scroll;
-        font-family: 'Patrick Hand', sans-serif;
+        font-family:  'metal', 'Patrick Hand', sans-serif;
         letter-spacing: 0.05em;
         padding: 0px 16px;
     }
@@ -68,6 +77,7 @@ h3 {
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--cream);
+    letter-spacing: 2px;
 }
 
 .track-title {

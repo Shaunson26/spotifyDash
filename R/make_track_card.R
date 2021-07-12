@@ -1,4 +1,19 @@
-
+#' Make a track information card - HTML object
+#'
+#' HTML
+#'
+#' @param summarised_track data.frame, a row from summarise_recently_played
+#'
+#' @value shiny.tag
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' get_recently_played() %>%
+#'   summarise_recently_played() %>%
+#'   slice(1) %>%
+#'   make_track_card() %>%
+#'   htmltools::browsable()}
 make_track_card <- function(summarised_track){
 
   container_css <-
@@ -36,12 +51,19 @@ make_track_card <- function(summarised_track){
                    #`font-weight`='bold',
                    `font-size`='1em',
                    `padding-left`='2px',
-                   `font-weight` = 900)
+                   `font-weight` = 900,
+                   `white-space` = 'nowrap',
+                   overflow = 'hidden',
+                   `text-overflow` = 'ellipsis')
 
   artist_css <-
-    htmltools::css(`font-size`='0.75em',
+    htmltools::css(display = 'block',
+                   `font-size`='0.75em',
                    `padding-left`='2px',
-                   `font-weight` = 900)
+                   `font-weight` = 900,
+                   `white-space` = 'nowrap',
+                   overflow = 'hidden',
+                   `text-overflow` = 'ellipsis')
 
   htmltools::div(class = 'track-card', style=container_css,
                  #htmltools::span(style=number_css, 1),

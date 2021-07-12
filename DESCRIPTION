@@ -1,13 +1,12 @@
 Package: spotifyDash
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Spotify Shiny Dashboard
+Version: 0.0.0.9001
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Shaun",
+           family = "Nielsen",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "first.last@example.com")
+Description: Obtain user data from Spotify API and show in a Shiny dashboard(s)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -2,16 +2,14 @@ library(shiny)
 library(dplyr)
 library(plotly)
 library(htmltools)
+#library(spotifyDash)
 
-load(here::here('dev_area/spotify_tmp.rdata'))
-
-for(i in list.files(here::here('R/'))){
-  source(here::here(paste0('R/', i)))
-  rm(i)
-}
-
-rp_df <- summarise_recently_played(rp)
-rp_tf_df <- summarise_audio_features(rp_tf)
+# load(here::here('dev_area/spotify_tmp.rdata'))
+#
+# for(i in list.files(here::here('R/'))){
+#   source(here::here(paste0('R/', i)))
+#   rm(i)
+# }
 
 # UI ----
 ui <-
@@ -55,7 +53,7 @@ ui <-
                                                      `overflow-x` = 'scroll',
                                                      `overflow-y` = 'hidden',
                                                      margin = '16px',
-                                                     `min-height` = '200px',
+                                                     `min-height` = '175px',
                                                      `margin-bottom` = 0,
                                                      `padding-bottom` = '8px')
                       # cards insert here
@@ -69,7 +67,7 @@ server <- function(input, output, session) {
   authModel <-
     modalDialog(
       title = 'Authorize data collection',
-      'blah blah blah',
+      'Authorise this app to collect user data - recently played',
       easyClose = TRUE,
       footer =  tagList(
         modalButton("Cancel"),
@@ -77,14 +75,14 @@ server <- function(input, output, session) {
       )
     )
 
-  #showModal(authModel)
+  showModal(authModel)
 
-  #observeEvent(input$authOk, {
+  observeEvent(input$authOk, {
 
     removeModal()
 
     # * Get data ----
-    #get_spotify_oauth_token()
+    get_spotify_oauth_token()
 
     #+ Insert error check here
 
@@ -93,7 +91,6 @@ server <- function(input, output, session) {
       summarise_recently_played()
 
     rp_tf_df <-
-      get_track_id(rp) %>%
       get_audio_features(rp_df$track_id) %>%
       summarise_audio_features()
 
@@ -131,7 +128,7 @@ server <- function(input, output, session) {
     insertUI(selector = '#track-banner',
              ui = flex_content)
 
-  #})
+  })
 }
 
 # Run app ----

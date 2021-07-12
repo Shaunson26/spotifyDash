@@ -1,3 +1,12 @@
+#' Summarise (wrangle) a recently played API call result
+#'
+#' The API call result is a list of data and this function turns parts of it into
+#' a data.frame for ease of use
+#'
+#' @param result_list list, that from get_recently_played
+#'
+#' @return data.frame
+#' @export
 summarise_recently_played <- function(result_list){
 
   track_df <-

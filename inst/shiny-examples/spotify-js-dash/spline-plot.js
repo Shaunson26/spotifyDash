@@ -121,7 +121,7 @@ function plotly_spline(graphDiv, data) {
             text: `<b>${data.title}</b>`,
             font: {
                 size: 18,
-                family: 'Patrick Hand',
+                family: "'metal', 'Patrick Hand'",
                 color: bgPuple
             }
         },
@@ -136,7 +136,7 @@ function plotly_spline(graphDiv, data) {
             tickvals: [0.05, 0.92],
             ticktext: ['low', 'high'],
             tickfont: {
-                family: 'Patrick Hand',
+                family: "'metal', 'Patrick Hand'",
                 size: 14,
                 color: bgPuple
             }
