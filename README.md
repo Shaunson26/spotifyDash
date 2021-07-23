@@ -43,6 +43,13 @@ get_spotify_oauth_token()
 
 ## to-do
 
+Try running the shiny - kinda - dash I’ve been working on.
+
+``` r
+#shiny-examples/spotify-shiny-dash
+run_spotify_shiny_dash()
+```
+
 ``` r
 # GET TRACK DATA ----
 # Recently played, top tracks, playlist tracks
