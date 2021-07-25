@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="w3.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="d3.min.js"></script>
+    <script src="chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noticia+Text:wght@700&family=Patrick+Hand&display=swap"
+        rel="stylesheet">
+    <title>Spotify baby!</title>
+</head>
+
+<body>
+    <div class="w3-row ">
+        <div class="w3-container" id='title-container'>
+            <h1 class="w3-center">Your Spotify</h1>
+            <h3>Recently played</h3>
+        </div>
+    </div>
+
+    <div class="w3-row" id='plot-row'>
+        <div class='w3-half' style='height:400px;'>
+            <div id="audio-feature-radial-plot-container" style='height:400px;'>
+                <canvas id="audio-feature-radial-plot"></canvas>
+            </div>
+        </div>
+        <div class="w3-half" id="hist-half">
+            <div class="w3-row"></div>
+            <div class="w3-row"></div>
+            <div class="w3-row"></div>
+            <div class="w3-row"></div>
+        </div>
+    </div>
+    <div class="track-row"></div>
+    <script src="xx-audio-data.js"></script>
+    <script src="cjs-radar-chart.js"></script>
+    <script src="cjs-spline-chart.js"></script>
+    <!--script src="polar-plot.js"></script>
+    <script src="spline-plot.js"></script>
+    <script src="track-cards.js"></script-->
+    <!--script>
+
+        fetch('audio-data.json')
+            .then(response => response.json())
+            .then(audioFeatures => {
+                plotly_polar(audioFeatures, graphDiv = 'polar-plot');
+                addHistograms(audioFeatures);
+            });
+
+        fetch('track-data.json')
+            .then(response => response.json())
+            .then(trackFeatures => {
+                insertCards(trackFeatures);
+            });
+
+
+
+    </script-->
+</body>
+
+</html>
