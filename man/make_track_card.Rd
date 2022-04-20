@@ -9,6 +9,9 @@ make_track_card(summarised_track)
 \arguments{
 \item{summarised_track}{data.frame, a row from summarise_recently_played}
 }
+\value{
+shiny.tag
+}
 \description{
 HTML
 }

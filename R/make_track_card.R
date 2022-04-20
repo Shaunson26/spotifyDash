@@ -4,7 +4,7 @@
 #'
 #' @param summarised_track data.frame, a row from summarise_recently_played
 #'
-#' @value shiny.tag
+#' @return shiny.tag
 #' @export
 #'
 #' @examples
