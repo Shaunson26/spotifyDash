@@ -15,6 +15,7 @@ audio_scatterpolar_multiple <-
       plotly::plot_ly(
         type = 'scatterpolar',
         mode = mode,
+        line = list(shape = 'spline'),
         fill = ifelse(fill, 'toself', 'none'),
         r = ~value,
         theta = ~name,

@@ -1,10 +1,13 @@
+library(magrittr)
 
 countries = c('AU', 'NZ', 'ES', 'GB', 'DK', 'LK')
 countries <- setNames(countries, countries)
 countries <- as.list(countries)
 
-aa <-
+country_top50_playlists <-
   purrr::map_df(countries, function(country_id){
+
+    #country_id = 'AU'
 
     message(country_id)
 
@@ -28,11 +31,11 @@ aa <-
 
   })
 
-bb <-
-  aa %>%
+country_top50_audio_features <-
+  country_top50_playlists %>%
   dplyr::distinct(track_id, .keep_all = T) %>%
-  dplyr::mutate(group = rep(seq(1, ceiling(n() / 10)), each = 10)[1:n()]) %>%
-  group_split(group) %>%
+  dplyr::mutate(group = rep(seq(1, ceiling(dplyr::n() / 10)), each = 10)[1:dplyr::n()]) %>%
+  dplyr::group_split(group) %>%
   purrr::map_df(function(split){
     split %>%
       dplyr::pull(track_id) %>%
@@ -41,9 +44,9 @@ bb <-
   })
 
 
-cc <-
-  aa %>%
-  left_join(bb, by = c('track_id' = 'id'))
+country_top50 <-
+  country_top50_playlists %>%
+  dplyr::left_join(country_top50_audio_features, by = c('track_id' = 'id'))
 
 features = c('danceability', 'energy', 'loudness', 'speechiness',
              'acousticness', 'instrumentalness', 'liveness', 'valence')
@@ -71,6 +74,7 @@ features = c('danceability', 'energy', 'loudness', 'speechiness',
 #   geom_point()
 
 library(reactable)
+library(htmltools)
 
 show_img <- function(value) {
   image <- img(src = value, alt = value, width = '100%')
@@ -88,7 +92,7 @@ colour_cell <- function(value) {
 
 aa %>%
   dplyr::select(-c(country, track_id)) %>%
-  mutate(present = 1) %>%
+  dplyr::mutate(present = 1) %>%
   tidyr::pivot_wider(names_from = country_id, values_from = present, values_fill = 0) %>%
   reactable(
     defaultColDef = colDef(
